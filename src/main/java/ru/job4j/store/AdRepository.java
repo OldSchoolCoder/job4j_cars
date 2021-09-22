@@ -5,11 +5,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
+import ru.job4j.model.Car;
+import ru.job4j.model.Model;
 import ru.job4j.model.Post;
+import ru.job4j.model.User;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class AdRepository implements Store {
@@ -34,6 +39,22 @@ public class AdRepository implements Store {
         }
     }
 
+    public List<Post> postsFilter(String data, String filterType) {
+        return this.wrapper(session -> session.createQuery("select distinct " +
+                "pst from Post pst join fetch pst.photos ph " +
+                "join fetch pst.car cr where cr." + filterType + " =:data " +
+                "and pst.sale=false")
+                .setParameter("data", data).list());
+    }
+
+    public List<Post> powerFilter(Integer power) {
+        return this.wrapper(session -> session.createQuery("select distinct " +
+                "pst from Post pst join fetch pst.photos ph " +
+                "join fetch pst.car cr where cr.power =:power " +
+                "and pst.sale=false")
+                .setParameter("power", power).list());
+    }
+
     @Override
     public List<Post> postsFromLastDay() {
         Calendar calendar = Calendar.getInstance();
@@ -42,6 +63,13 @@ public class AdRepository implements Store {
         return this.wrapper(session -> session.createQuery("from Post " +
                 "where created>:lastDayTime")
                 .setParameter("lastDayTime", lastDayTime).list());
+    }
+
+    @Override
+    public List<Post> allPosts() {
+        return this.wrapper(session -> session.createQuery("select distinct " +
+                "pst from Post pst join fetch pst.photos " +
+                "where pst.sale=false ").list());
     }
 
     @Override
@@ -61,5 +89,33 @@ public class AdRepository implements Store {
     @Override
     public void close() {
         StandardServiceRegistryBuilder.destroy(registry);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        User user = (User) this.wrapper(session -> {
+            final Query query = session.createQuery("from User where" +
+                    " email=:email");
+            query.setParameter("email", email);
+            return query.uniqueResult();
+        });
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<Post> findPostById(Integer id) {
+        Post post = (Post) this.wrapper(session -> {
+            final Query query = session.createQuery("select distinct " +
+                    "pst from Post pst join fetch pst.photos " +
+                    "where pst.id=:id");
+            query.setParameter("id", id);
+            return query.uniqueResult();
+        });
+        return Optional.ofNullable(post);
+    }
+
+    @Override
+    public void add(Model model) {
+        this.wrapper(session -> session.merge(model));
     }
 }

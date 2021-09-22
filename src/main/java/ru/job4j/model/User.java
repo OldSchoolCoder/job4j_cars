@@ -1,6 +1,8 @@
 package ru.job4j.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +11,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class User implements Model {
+
+    @JsonProperty
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @JsonProperty
     private String name;
     private String email;
     private String password;
@@ -58,12 +64,17 @@ public class User implements Model {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(posts, user.posts);
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getName(), user.getName())
+                && Objects.equals(getEmail(), user.getEmail())
+                && Objects.equals(getPassword(), user.getPassword())
+                && Objects.equals(posts, user.posts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), getPassword(), posts);
+        return Objects.hash(getId(), getName(),
+                getEmail(), getPassword(), posts);
     }
 }
 
