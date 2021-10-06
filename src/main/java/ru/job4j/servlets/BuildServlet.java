@@ -23,7 +23,7 @@ public class BuildServlet extends HttpServlet {
         String filterType = req.getParameter("filterType");
         AdRepository store = new AdRepository();
         List<Post> posts;
-        if (filterType.equals("false")) {
+        if (filterType == null || filterType == "") {
             posts = store.allPosts();
         } else if (filterType.equals("power")) {
             posts = store.powerFilter(Integer.valueOf(data));
@@ -33,7 +33,7 @@ public class BuildServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         String postsAsString = mapper.writeValueAsString(posts);
         resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("json");
+        resp.setContentType("application/json");
         resp.getWriter().write(postsAsString);
     }
 }

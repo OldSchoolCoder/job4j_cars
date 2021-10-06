@@ -86,7 +86,7 @@
                     </ul>
                 </div>
                 <div class="col-md-10 mx-auto col-lg-7">
-                    <form action="<%=request.getContextPath()%>/add.do" method="post" enctype="multipart/form-data"
+                    <form action="/cars/add.do" method="post" enctype="multipart/form-data"
                           class="p-4 p-md-5 border rounded-3 bg-dark">
                         <div class="form-floating mb-3">
                             <input type="hidden" name="id" value="<%=id%>" id="hidden">
@@ -118,7 +118,7 @@
                                        name="sale" type="checkbox"> Sale
                             </label>
                         </div>
-                        <button onclick="return validate(7)" class="w-100 btn btn-lg btn-info"
+                        <button onclick="return validate()" class="w-100 btn btn-lg btn-info"
                                 type="submit">
                             <% if (request.getParameter("id") == null) { %>
                             Add post

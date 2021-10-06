@@ -1,14 +1,14 @@
-function validate(howManyInputs) {
-    let counter = 0;
+function validate() {
+    let isError = false;
     $('form').find('input').each(function () {
-        if ($(this).val() == '') {
+        if ($(this).val() === '' || $(this).val() === null ||
+            $(this).val() === undefined) {
             alert('Enter ' + $(this).attr('id'));
+            isError = true;
             return false;
-        } else {
-            counter++;
         }
     });
-    if (counter == howManyInputs) {
+    if (!isError) {
         $("form").submit();
     }
     return false;

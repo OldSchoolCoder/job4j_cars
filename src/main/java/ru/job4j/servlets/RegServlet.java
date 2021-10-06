@@ -23,14 +23,12 @@ public class RegServlet extends HttpServlet {
         String email = req.getParameter("email");
         Optional<User> userOptional = store.findByEmail(email);
         if (userOptional.isEmpty()) {
-            int id = 0;
             User user = new User();
             String username = req.getParameter("username");
             String password = req.getParameter("password");
             user.setPassword(password);
             user.setEmail(email);
             user.setName(username);
-            user.setId(id);
             store.add(user);
             req.getRequestDispatcher("success.html").forward(req, resp);
         } else {

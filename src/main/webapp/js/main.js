@@ -4,6 +4,8 @@ $(document).ready(function () {
     buildTable();
 });
 
+let params = (new URL(document.location)).searchParams;
+
 function avatar(response) {
     return '<div class="dropdown">\n' +
         '     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"\n' +
@@ -34,8 +36,8 @@ function hello() {
 
 function buildTable() {
     $.getJSON("http://localhost:8080/cars/build.do", {
-        data: getUrlParameter('data'),
-        filterType: getUrlParameter('filterType')
+        data: params.get('data'),
+        filterType: params.get('filterType')
     }).done(function (response) {
         let cells = [];
         $.each(response, function (key, val) {
@@ -70,10 +72,8 @@ function showCategory() {
     let brandCategories = [];
     let bodyCategories = [];
     let powerCategories = [];
-    $.getJSON("http://localhost:8080/cars/build.do", {
-        data: "false",
-        filterType: "false"
-    }).done(function (response) {
+    $.getJSON("http://localhost:8080/cars/build.do"
+    ).done(function (response) {
         $.each(response, function (key, val) {
             brandCategories.push('<li><a class="dropdown-item" href="/cars/?data='
                 + val.car.brand + '&filterType=brand">' + val.car.brand + '</a></li>');
@@ -90,19 +90,3 @@ function showCategory() {
     });
 }
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return typeof sParameterName[1] === undefined ? true :
-                decodeURIComponent(sParameterName[1]);
-        }
-    }
-    return false;
-};

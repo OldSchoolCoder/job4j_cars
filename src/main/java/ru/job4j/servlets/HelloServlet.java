@@ -22,7 +22,7 @@ public class HelloServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         String userAsString = mapper.writeValueAsString(user);
         resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("json");
+        resp.setContentType("application/json");
         resp.getWriter().write(userAsString);
     }
 }

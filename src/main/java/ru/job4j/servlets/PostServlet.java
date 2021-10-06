@@ -30,7 +30,7 @@ public class PostServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             String postAsString = mapper.writeValueAsString(post);
             resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("json");
+            resp.setContentType("application/json");
             resp.getWriter().write(postAsString);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Error!" +

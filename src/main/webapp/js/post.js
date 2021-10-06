@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 function showInfo() {
     $.getJSON("http://localhost:8080/cars/post.do", {
-        id: getUrlParameter('id')
+        id: params.get('id')
     }).done(function (response) {
         $('#info').html(info(response));
     }).fail(function (response) {
@@ -28,19 +28,3 @@ function info(response) {
         '                </div>';
 }
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return typeof sParameterName[1] === undefined ? true :
-                decodeURIComponent(sParameterName[1]);
-        }
-    }
-    return false;
-};
